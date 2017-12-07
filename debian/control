@@ -1,0 +1,12 @@
+Source: ros-hydro-denso-robot-gazebo
+Section: misc
+Priority: extra
+Maintainer: DENSO WAVE INCORPORATED <denso_robot_soft@denso-wave.co.jp>
+Build-Depends: debhelper (>= 9.0.0), ros-hydro-catkin
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-hydro-denso-robot-gazebo
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-hydro-gazebo-ros-control, ros-hydro-gazebo-ros-pkgs, ros-hydro-joint-state-controller, ros-hydro-joint-trajectory-controller
+Description: DENSO robot simulation package
