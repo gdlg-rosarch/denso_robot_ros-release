@@ -1,0 +1,12 @@
+Source: ros-hydro-bcap-service
+Section: misc
+Priority: extra
+Maintainer: DENSO WAVE INCORPORATED <denso_robot_soft@denso-wave.co.jp>
+Build-Depends: debhelper (>= 9.0.0), ros-hydro-bcap-core, ros-hydro-catkin, ros-hydro-message-generation, ros-hydro-roscpp, ros-hydro-std-msgs
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-hydro-bcap-service
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-hydro-bcap-core, ros-hydro-message-runtime, ros-hydro-roscpp, ros-hydro-std-msgs
+Description: b-CAP service package
