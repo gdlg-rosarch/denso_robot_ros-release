@@ -1,0 +1,12 @@
+Source: ros-hydro-denso-robot-moveit-config
+Section: misc
+Priority: extra
+Maintainer: MoveIt Setup Assistant <assistant@moveit.ros.org>
+Build-Depends: debhelper (>= 9.0.0), ros-hydro-catkin, ros-hydro-roscpp
+Homepage: http://moveit.ros.org/
+Standards-Version: 3.9.2
+
+Package: ros-hydro-denso-robot-moveit-config
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-hydro-joint-state-publisher, ros-hydro-moveit-planners-ompl, ros-hydro-moveit-ros-move-group, ros-hydro-moveit-ros-visualization, ros-hydro-moveit-simple-controller-manager, ros-hydro-robot-state-publisher, ros-hydro-roscpp, ros-hydro-xacro
+Description: An automatically generated package with all the configuration and launch files for using the DENSO robots with the MoveIt Motion Planning Framework
