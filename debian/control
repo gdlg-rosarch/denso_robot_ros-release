@@ -1,0 +1,12 @@
+Source: ros-indigo-bcap-service
+Section: misc
+Priority: extra
+Maintainer: DENSO WAVE INCORPORATED <denso_robot_soft@denso-wave.co.jp>
+Build-Depends: debhelper (>= 9.0.0), ros-indigo-bcap-core, ros-indigo-catkin, ros-indigo-message-generation, ros-indigo-roscpp, ros-indigo-std-msgs
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-indigo-bcap-service
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-indigo-bcap-core, ros-indigo-message-runtime, ros-indigo-roscpp, ros-indigo-std-msgs
+Description: b-CAP service package
