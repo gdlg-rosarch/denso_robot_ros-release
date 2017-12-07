@@ -1,0 +1,12 @@
+Source: ros-hydro-denso-robot-core-test
+Section: misc
+Priority: extra
+Maintainer: DENSO WAVE INCORPORATED <denso_robot_soft@denso-wave.co.jp>
+Build-Depends: debhelper (>= 9.0.0), ros-hydro-actionlib, ros-hydro-bcap-core, ros-hydro-catkin, ros-hydro-denso-robot-core, ros-hydro-roscpp, ros-hydro-std-msgs
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-hydro-denso-robot-core-test
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-hydro-actionlib, ros-hydro-roscpp, ros-hydro-std-msgs
+Description: DENSO robot control core test package
