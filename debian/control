@@ -1,0 +1,12 @@
+Source: ros-hydro-denso-robot-ros
+Section: misc
+Priority: extra
+Maintainer: DENSO WAVE INCORPORATED <denso_robot_soft@denso-wave.co.jp>
+Build-Depends: debhelper (>= 9.0.0), ros-hydro-catkin
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-hydro-denso-robot-ros
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-hydro-bcap-core, ros-hydro-bcap-service, ros-hydro-bcap-service-test, ros-hydro-denso-robot-bringup, ros-hydro-denso-robot-control, ros-hydro-denso-robot-core, ros-hydro-denso-robot-core-test, ros-hydro-denso-robot-descriptions, ros-hydro-denso-robot-gazebo, ros-hydro-denso-robot-moveit-config
+Description: DENSO robot meta package
