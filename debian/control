@@ -1,0 +1,12 @@
+Source: ros-indigo-denso-robot-descriptions
+Section: misc
+Priority: extra
+Maintainer: DENSO WAVE INCORPORATED <denso_robot_soft@denso-wave.co.jp>
+Build-Depends: debhelper (>= 9.0.0), ros-indigo-catkin
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-indigo-denso-robot-descriptions
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, 
+Description: DENSO robot descriptions package
