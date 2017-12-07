@@ -1,3 +1,37 @@
+## denso_robot_ros (kinetic) - 3.0.1-0
+
+The packages in the `denso_robot_ros` repository were released into the `kinetic` distro by running `/usr/bin/bloom-release --rosdistro kinetic --track kinetic denso_robot_ros --edit` on `Thu, 07 Dec 2017 15:47:50 -0000`
+
+These packages were released:
+- `bcap_core`
+- `bcap_service`
+- `bcap_service_test`
+- `denso_robot_bringup`
+- `denso_robot_control`
+- `denso_robot_core`
+- `denso_robot_core_test`
+- `denso_robot_descriptions`
+- `denso_robot_gazebo`
+- `denso_robot_moveit_config`
+- `denso_robot_ros`
+
+Version of package(s) in repository `denso_robot_ros`:
+
+- upstream repository: https://github.com/DENSORobot/denso_robot_ros.git
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `null`
+- new version: `3.0.1-0`
+
+Versions of tools used:
+
+- bloom version: `0.6.1`
+- catkin_pkg version: `0.3.9`
+- rosdep version: `0.11.8`
+- rosdistro version: `0.6.2`
+- vcstools version: `0.1.39`
+
+
 ## denso_robot_ros (indigo) - 3.0.1-0
 
 The packages in the `denso_robot_ros` repository were released into the `indigo` distro by running `/usr/bin/bloom-release --rosdistro indigo --track indigo denso_robot_ros --edit` on `Thu, 07 Dec 2017 06:35:50 -0000`
