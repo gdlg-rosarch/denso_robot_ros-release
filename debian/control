@@ -1,0 +1,12 @@
+Source: ros-indigo-bcap-core
+Section: misc
+Priority: extra
+Maintainer: DENSO WAVE INCORPORATED <denso_robot_soft@denso-wave.co.jp>
+Build-Depends: debhelper (>= 9.0.0), ros-indigo-catkin
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-indigo-bcap-core
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, 
+Description: b-CAP core library package
