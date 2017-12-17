@@ -43,6 +43,7 @@ using namespace std_msgs;
 #include "denso_robot_core/Joints.h"
 #include "denso_robot_core/ExJoints.h"
 #include "denso_robot_core/PoseData.h"
+#include "denso_robot_core/UserIO.h"
 
 // Action
 #include <actionlib/server/simple_action_server.h>
@@ -54,7 +55,7 @@ using namespace actionlib;
 #include "denso_robot_core/DriveStringAction.h"
 #include "denso_robot_core/DriveValueAction.h"
 
-#include "tinyxml2.h"
+#include "denso_robot_core/tinyxml2.h"
 using namespace tinyxml2;
 
 #define MESSAGE_QUEUE (1)
