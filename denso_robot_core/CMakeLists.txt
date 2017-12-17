@@ -2,42 +2,44 @@ cmake_minimum_required(VERSION 2.8.3)
 project(denso_robot_core)
 
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  std_msgs
-  message_generation
   actionlib
   actionlib_msgs
   bcap_core
   bcap_service
+  message_generation
+  roscpp
+  std_msgs
 )
 
 add_message_files(
   FILES
-  Joints.msg
   ExJoints.msg
+  Joints.msg
   PoseData.msg
+  UserIO.msg
 )
 
 add_action_files(
   FILES
-  MoveString.action
-  MoveValue.action
   DriveString.action
   DriveValue.action
+  MoveString.action
+  MoveValue.action
 )
 
 generate_messages(
   DEPENDENCIES
-  std_msgs
   actionlib_msgs
+  std_msgs
 )
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES denso_robot_core
-  CATKIN_DEPENDS roscpp std_msgs message_runtime
-    actionlib actionlib_msgs bcap_service
-  DEPENDS bcap_core
+  LIBRARIES ${PROJECT_NAME}
+  CATKIN_DEPENDS actionlib
+    actionlib_msgs bcap_core bcap_service
+    message_runtime roscpp
+    std_msgs
 )
 
 ###########
@@ -45,50 +47,46 @@ catkin_package(
 ###########
 
 include_directories(
-  include/${PROJECT_NAME}
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
-link_directories(
-  ${catkin_LIB_DIRS}
-)
-
-add_library(denso_robot_core
-  src/denso_robot_core.cpp
+add_library(${PROJECT_NAME}
+  src/denso_base.cpp
   src/denso_controller.cpp
   src/denso_controller_rc8.cpp
   src/denso_robot.cpp
+  src/${PROJECT_NAME}.cpp
   src/denso_robot_rc8.cpp
   src/denso_task.cpp
   src/denso_variable.cpp
-  src/denso_base.cpp
   src/tinyxml2.cpp
 )
 
-add_dependencies(denso_robot_core
+add_dependencies(${PROJECT_NAME}
   ${PROJECT_NAME}_generate_messages_cpp)
 
-add_executable(denso_robot_core_exec
-  src/denso_robot_core.cpp
+add_executable(${PROJECT_NAME}_exec
+  src/denso_base.cpp
   src/denso_controller.cpp
   src/denso_controller_rc8.cpp
   src/denso_robot.cpp
+  src/${PROJECT_NAME}.cpp
   src/denso_robot_rc8.cpp
   src/denso_task.cpp
   src/denso_variable.cpp
-  src/denso_base.cpp
   src/tinyxml2.cpp
 )
 
-add_dependencies(denso_robot_core_exec
+add_dependencies(${PROJECT_NAME}_exec
   ${PROJECT_NAME}_generate_messages_cpp)
 
-target_link_libraries(denso_robot_core
+target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
   ${bcap_service_LIBRARIES}
 )
 
-target_link_libraries(denso_robot_core_exec
+target_link_libraries(${PROJECT_NAME}_exec
   ${catkin_LIBRARIES}
   ${bcap_service_LIBRARIES}
 )
@@ -97,7 +95,7 @@ target_link_libraries(denso_robot_core_exec
 ## Install ##
 #############
 
-install(TARGETS denso_robot_core denso_robot_core_exec
+install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_exec
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -114,4 +112,4 @@ install(DIRECTORY include/${PROJECT_NAME}/
 foreach(dir launch config)
    install(DIRECTORY ${dir}
       DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
-endforeach(dir)
+endforeach()
