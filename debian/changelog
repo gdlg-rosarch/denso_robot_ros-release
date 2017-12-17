@@ -1,0 +1,15 @@
+ros-indigo-bcap-core (3.0.2-0trusty) trusty; urgency=high
+
+  * Change descriptions and add url, author
+  * Check the catkin_lint result
+  * Contributors: MIYAKOSHI Yoshihiro
+
+ -- DENSO WAVE INCORPORATED <denso_robot_soft@denso-wave.co.jp>  Thu, 14 Dec 2017 15:00:00 -0000
+
+ros-indigo-bcap-core (3.0.1-0trusty) trusty; urgency=high
+
+
+
+ -- DENSO WAVE INCORPORATED <denso_robot_soft@denso-wave.co.jp>  Wed, 11 Oct 2017 15:00:00 -0000
+
+
