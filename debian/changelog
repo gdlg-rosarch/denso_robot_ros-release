@@ -1,0 +1,10 @@
+ros-indigo-bcap-service-test (3.0.2-0trusty) trusty; urgency=high
+
+  * Remove new line from ROS_INFO,ROS_WARN,ROS_ERROR
+  * Change descriptions and add url, author
+  * Check the catkin_lint result
+  * Contributors: MIYAKOSHI Yoshihiro
+
+ -- DENSO WAVE INCORPORATED <denso_robot_soft@denso-wave.co.jp>  Thu, 14 Dec 2017 15:00:00 -0000
+
+
