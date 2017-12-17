@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 2.8.3)
 project(bcap_service)
 
 find_package(catkin REQUIRED COMPONENTS
+  bcap_core
+  message_generation
   roscpp
   std_msgs
-  message_generation
-  bcap_core
 )
 
 add_message_files(
@@ -25,9 +25,8 @@ generate_messages(
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES bcap_service
-  CATKIN_DEPENDS roscpp std_msgs message_runtime
-  DEPENDS bcap_core
+  LIBRARIES ${PROJECT_NAME}
+  CATKIN_DEPENDS bcap_core message_runtime roscpp std_msgs
 )
 
 ###########
@@ -35,32 +34,28 @@ catkin_package(
 ###########
 
 include_directories(
-  include/${PROJECT_NAME}
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
-link_directories(
-  ${catkin_LIB_DIRS}
-)
+add_library(${PROJECT_NAME}
+  src/${PROJECT_NAME}.cpp)
 
-add_library(bcap_service
-  src/bcap_service.cpp)
-
-add_dependencies(bcap_service
+add_dependencies(${PROJECT_NAME}
   ${PROJECT_NAME}_generate_messages_cpp)
 
-add_executable(bcap_service_exec
-  src/bcap_service.cpp)
+add_executable(${PROJECT_NAME}_exec
+  src/${PROJECT_NAME}.cpp)
 
-add_dependencies(bcap_service_exec
+add_dependencies(${PROJECT_NAME}_exec
   ${PROJECT_NAME}_generate_messages_cpp)
 
-target_link_libraries(bcap_service
+target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
   ${bcap_core_LIBRARIES}
 )
 
-target_link_libraries(bcap_service_exec
+target_link_libraries(${PROJECT_NAME}_exec
   ${catkin_LIBRARIES}
   ${bcap_core_LIBRARIES}
 )
@@ -69,7 +64,7 @@ target_link_libraries(bcap_service_exec
 ## Install ##
 #############
 
-install(TARGETS bcap_service bcap_service_exec
+install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_exec
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
