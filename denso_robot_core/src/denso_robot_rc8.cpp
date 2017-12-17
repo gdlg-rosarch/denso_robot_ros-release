@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-#include "denso_robot_rc8.h"
+#include "denso_robot_core/denso_robot_rc8.h"
 
 #define BCAP_ROBOT_EXECUTE_ARGS (3)
 #define BCAP_ROBOT_HALT_ARGS    (2)
@@ -67,10 +67,12 @@ DensoRobotRC8::DensoRobotRC8(DensoBase* parent,
     m_tsfmt(0), m_timestamp(0),
     m_sendfmt(0), m_send_miniio(0), m_send_handio(0),
     m_recvfmt(0), m_recv_miniio(0), m_recv_handio(0),
-    m_send_userio_offset(0), m_send_userio_size(0),
-    m_recv_userio_offset(0), m_recv_userio_size(0)
+    m_send_userio_offset(UserIO::MIN_USERIO_OFFSET),
+    m_send_userio_size(1),
+    m_recv_userio_offset(UserIO::MIN_USERIO_OFFSET),
+    m_recv_userio_size(1)
 {
-  m_tsfmt = 0;
+  m_tsfmt = TSFMT_MILLISEC;
 
   m_sendfmt = SENDFMT_MINIIO | SENDFMT_HANDIO;
 
@@ -582,11 +584,11 @@ HRESULT DensoRobotRC8::ChangeMode(int mode)
       m_vecService[DensoBase::SRV_ACT]->put_Retry(3);
     }
   } else {
-    hr = ExecSlaveMode("slvChangeMode", mode);
-    ExecGiveArm();
-
     m_vecService[DensoBase::SRV_ACT]->put_Timeout(m_memTimeout);
     m_vecService[DensoBase::SRV_ACT]->put_Retry(m_memRetry);
+
+    hr = ExecSlaveMode("slvChangeMode", mode);
+    ExecGiveArm();
   }
 
   return hr;
@@ -727,9 +729,9 @@ HRESULT DensoRobotRC8::CreateSendParameter(
     if(send_uio) {
       pvnt[offset+0].vt = VT_I4;
       pvnt[offset+0].lVal = send_userio_offset;
-
+      
       pvnt[offset+1].vt = VT_I4;
-      pvnt[offset+1].lVal = send_userio_size;
+      pvnt[offset+1].lVal = send_userio_size * UserIO::USERIO_ALIGNMENT;
 
       pvnt[offset+2].vt = (VT_ARRAY | VT_UI1);
       pvnt[offset+2].parray = SafeArrayCreateVector(VT_UI1, 0, send_userio_size);
@@ -747,7 +749,7 @@ HRESULT DensoRobotRC8::CreateSendParameter(
       pvnt[offset+0].lVal = recv_userio_offset;
 
       pvnt[offset+1].vt = VT_I4;
-      pvnt[offset+1].lVal = recv_userio_size;
+      pvnt[offset+1].lVal = recv_userio_size * UserIO::USERIO_ALIGNMENT;
 
       offset+=2;
     }
@@ -897,16 +899,15 @@ HRESULT DensoRobotRC8::ParseRecvParameter(
 
     // User I/O
     if(recv_uio) {
-      if((pvnt[offset].vt != (VT_ARRAY | VT_UI1))
-          || (m_recv_userio_size != pvnt[offset].parray->rgsabound->cElements))
+      if(pvnt[offset].vt != (VT_ARRAY | VT_UI1))
       {
         hr = E_FAIL;
         goto exit_proc;
       }
 
       SafeArrayAccessData(pvnt[offset].parray, (void**)&pbool);
-      recv_userio.resize(m_recv_userio_size);
-      std::copy(pbool, &pbool[m_recv_userio_size], recv_userio.begin());
+      recv_userio.resize(pvnt[offset].parray->rgsabound->cElements);
+      std::copy(pbool, &pbool[pvnt[offset].parray->rgsabound->cElements], recv_userio.begin());
       SafeArrayUnaccessData(pvnt[offset].parray);
 
       offset++;
@@ -1254,4 +1255,188 @@ void DensoRobotRC8::Action_Feedback()
   }
 }
 
+int DensoRobotRC8::get_SendFormat() const
+{
+  return m_sendfmt;
+}
+
+void DensoRobotRC8::put_SendFormat(int format)
+{
+  switch(format) {
+    case SENDFMT_NONE:
+    case SENDFMT_HANDIO:
+    case SENDFMT_MINIIO:
+    case SENDFMT_HANDIO | SENDFMT_MINIIO:
+    case SENDFMT_USERIO:
+    case SENDFMT_USERIO | SENDFMT_HANDIO:
+      m_sendfmt = format;
+      break;
+    default:
+      ROS_WARN("Failed to put_SendFormat.");
+      break;
+  }
+}
+  
+int DensoRobotRC8::get_RecvFormat() const
+{
+  return m_recvfmt;
+}
+  
+void DensoRobotRC8::put_RecvFormat(int format)
+{
+  int pose = format & RECVFMT_POSE;
+  if((RECVFMT_NONE <= pose)
+     && (pose <= RECVFMT_POSE_TJ))
+  {
+    switch(format & ~RECVFMT_POSE) {
+      case RECVFMT_NONE:
+      case RECVFMT_TIME:
+      case RECVFMT_HANDIO:
+      case RECVFMT_CURRENT:
+      case RECVFMT_MINIIO:
+      case RECVFMT_USERIO:
+      case RECVFMT_TIME | RECVFMT_HANDIO:
+      case RECVFMT_TIME | RECVFMT_MINIIO:
+      case RECVFMT_HANDIO | RECVFMT_MINIIO:
+      case RECVFMT_TIME | RECVFMT_HANDIO | RECVFMT_MINIIO:
+      case RECVFMT_TIME | RECVFMT_USERIO:
+      case RECVFMT_HANDIO | RECVFMT_USERIO:
+      case RECVFMT_TIME | RECVFMT_HANDIO | RECVFMT_USERIO:
+      case RECVFMT_CURRENT | RECVFMT_MINIIO:
+      case RECVFMT_TIME | RECVFMT_CURRENT | RECVFMT_MINIIO:
+      case RECVFMT_CURRENT | RECVFMT_HANDIO:
+      case RECVFMT_TIME | RECVFMT_CURRENT | RECVFMT_HANDIO:
+      case RECVFMT_CURRENT | RECVFMT_HANDIO | RECVFMT_MINIIO:
+      case RECVFMT_TIME | RECVFMT_CURRENT | RECVFMT_HANDIO | RECVFMT_MINIIO:
+      case RECVFMT_CURRENT | RECVFMT_USERIO:
+      case RECVFMT_TIME | RECVFMT_CURRENT | RECVFMT_USERIO:
+      case RECVFMT_CURRENT | RECVFMT_MINIIO | RECVFMT_USERIO:
+      case RECVFMT_TIME | RECVFMT_CURRENT | RECVFMT_HANDIO | RECVFMT_USERIO:
+        m_recvfmt = format;
+        break;
+      default:
+        ROS_WARN("Failed to put_RecvFormat.");
+        break;
+    }
+  }
+  else
+  {
+    ROS_WARN("Failed to put_RecvFormat.");
+  }
+}
+
+int DensoRobotRC8::get_TimeFormat() const
+{
+  return m_tsfmt;
+}
+
+void DensoRobotRC8::put_TimeFormat(int format)
+{
+  if((format == TSFMT_MILLISEC)
+     || (format == TSFMT_MICROSEC))
+  {
+    m_tsfmt = format;
+  }
+  else
+  {
+    ROS_WARN("Failed to put_TimeFormat.");
+  }
+}
+
+int DensoRobotRC8::get_MiniIO() const
+{
+  return m_recv_miniio;
+}
+
+void DensoRobotRC8::put_MiniIO(int value)
+{
+  m_send_miniio = value;
+}
+
+int DensoRobotRC8::get_HandIO() const
+{
+  return m_recv_handio;
+}
+
+void DensoRobotRC8::put_HandIO(int value)
+{
+  m_send_handio = value;
+}
+
+void DensoRobotRC8::put_SendUserIO(const UserIO& value)
+{
+  if(value.offset < UserIO::MIN_USERIO_OFFSET)
+  {
+    ROS_WARN("User I/O offset has to be greater than %d.",
+      UserIO::MIN_USERIO_OFFSET - 1);
+    return;
+  }
+  
+  if(value.offset % UserIO::USERIO_ALIGNMENT)
+  {
+    ROS_WARN("User I/O offset has to be multiple of %d.",
+      UserIO::USERIO_ALIGNMENT);
+    return;
+  }
+  
+  if(value.size <= 0)
+  {
+    ROS_WARN("User I/O size has to be greater than 0.");
+    return;
+  }
+  
+  if(value.size < value.value.size())
+  {
+    ROS_WARN("User I/O size has to be equal or greater than the value length.");
+    return;
+  }
+  
+  m_send_userio_offset = value.offset;
+  m_send_userio_size = value.size;
+  m_send_userio = value.value;
+}
+
+void DensoRobotRC8::put_RecvUserIO(const UserIO& value)
+{
+  if(value.offset < UserIO::MIN_USERIO_OFFSET)
+  {
+    ROS_WARN("User I/O offset has to be greater than %d.",
+      UserIO::MIN_USERIO_OFFSET - 1);
+    return;
+  }
+  
+  if(value.offset % UserIO::USERIO_ALIGNMENT)
+  {
+    ROS_WARN("User I/O offset has to be multiple of %d.",
+      UserIO::USERIO_ALIGNMENT);
+    return;
+  }
+  
+  if(value.size <= 0)
+  {
+    ROS_WARN("User I/O size has to be greater than 0.");
+    return;
+  }
+
+  m_recv_userio_offset = value.offset;
+  m_recv_userio_size = value.size;
+}
+
+void DensoRobotRC8::get_RecvUserIO(UserIO& value) const
+{
+  value.offset = m_recv_userio_offset;
+  value.size = m_recv_userio.size();
+  value.value = m_recv_userio;
+}
+
+void DensoRobotRC8::get_Current(std::vector<double> &current) const
+{
+  current = m_current;
+}
+
+int DensoRobotRC8::get_Timestamp() const
+{
+  return m_timestamp;
+}
+  
 }
