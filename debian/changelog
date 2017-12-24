@@ -1,0 +1,8 @@
+ros-indigo-denso-robot-gazebo (3.0.2-1trusty) trusty; urgency=high
+
+  * Change descriptions and add url, author
+  * Contributors: MIYAKOSHI Yoshihiro
+
+ -- DENSO WAVE INCORPORATED <denso_robot_soft@denso-wave.co.jp>  Thu, 14 Dec 2017 15:00:00 -0000
+
+
