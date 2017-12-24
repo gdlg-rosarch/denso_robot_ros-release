@@ -1,0 +1,12 @@
+Source: ros-kinetic-denso-robot-control
+Section: misc
+Priority: extra
+Maintainer: DENSO WAVE INCORPORATED <denso_robot_soft@denso-wave.co.jp>
+Build-Depends: debhelper (>= 9.0.0), ros-kinetic-bcap-core, ros-kinetic-bcap-service, ros-kinetic-catkin, ros-kinetic-controller-manager, ros-kinetic-denso-robot-core, ros-kinetic-hardware-interface, ros-kinetic-joint-limits-interface, ros-kinetic-roscpp, ros-kinetic-std-msgs, ros-kinetic-transmission-interface
+Homepage: http://ros.org/wiki/denso_robot_control
+Standards-Version: 3.9.2
+
+Package: ros-kinetic-denso-robot-control
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-kinetic-bcap-core, ros-kinetic-bcap-service, ros-kinetic-controller-manager, ros-kinetic-denso-robot-core, ros-kinetic-hardware-interface, ros-kinetic-joint-limits-interface, ros-kinetic-roscpp, ros-kinetic-std-msgs, ros-kinetic-transmission-interface
+Description: The denso robot control package includes a node for controlling DENSO robot controllers with MoveIt!.
