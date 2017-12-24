@@ -1,0 +1,12 @@
+Source: ros-indigo-denso-robot-bringup
+Section: misc
+Priority: extra
+Maintainer: DENSO WAVE INCORPORATED <denso_robot_soft@denso-wave.co.jp>
+Build-Depends: debhelper (>= 9.0.0), ros-indigo-catkin
+Homepage: http://ros.org/wiki/denso_robot_bringup
+Standards-Version: 3.9.2
+
+Package: ros-indigo-denso-robot-bringup
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, 
+Description: The denso robot bringup package includes launch files for starting denso robot nodes.
